@@ -1,0 +1,96 @@
+@import url("https://use.typekit.net/khl7rkh.css");
+$titleLead: 1.1;
+$subtitleLead: 1.2;
+$baseLead: 1.5;
+
+html {
+  font-size: 62.5%;
+  font-family: "Helvetica Neue", sans-serif;
+}
+
+$fluid_steps: (
+  ft-xxl: (minSize: 3.2rem, maxSize: 7rem, lead: $titleLead),
+  ft-11: (minSize: 2.7rem, maxSize: 3.26rem, lead: $titleLead),
+  ft-10: (minSize: 2.6rem, maxSize: 3.06rem, lead: $titleLead),
+  ft-9: (minSize: 2.5rem, maxSize: 2.86rem, lead: $titleLead),
+  ft-8: (minSize: 2.4rem, maxSize: 2.68rem, lead: $titleLead),
+  ft-7: (minSize: 2.3rem, maxSize: 2.5rem, lead: $titleLead),
+  ft-6: (minSize: 2.2rem, maxSize: 2.36rem, lead: $titleLead),
+  ft-5: (minSize: 2.1rem, maxSize: 2.2rem,lead: $titleLead),
+  ft-4: (minSize: 2rem, maxSize: 2.1rem, lead: $subtitleLead),
+  ft-3: (minSize: 1.9rem, maxSize: 1.95rem, lead: $baseLead),
+  ft-2: (minSize: 1.8rem, maxSize: 1.8rem, lead: $baseLead),
+  ft-1: (minSize: 1.7rem, maxSize: 1.7rem, lead: $baseLead),
+  ft-0: (minSize: 1.6rem, maxSize: 1.6rem, lead: $baseLead),
+  -ft-1: (minSize: 1.4rem, maxSize: 1.4rem, lead: $baseLead),
+  -ft-2: (minSize: 1.25rem, maxSize: 1.25rem, lead: $baseLead),
+  -ft-3: (minSize: 1.1rem, maxSize: 1.1rem, lead: $baseLead),
+  -ft-4: (minSize: 1.1rem, maxSize: 1.1rem, lead: $baseLead),
+);
+
+@each $class, $props in $fluid_steps {
+  @keyframes #{$class} {
+    20% {
+      font-size: map-get($props, minSize);
+    }
+    100% {
+      font-size: map-get($props, maxSize);
+    }
+  };
+  .#{$class} {
+    --tt-key: #{$class};
+    --tt-ease: ease-in;
+    font-size: map-get($props, maxSize);
+    line-height: map-get($props, lead);
+  }
+}
+
+@font-face {
+  font-display: swap;
+}
+
+h1 { @extend .ft-10 }
+h2 { @extend .ft-7 }
+h3 { @extend .ft-4 }
+h4 { @extend .ft-3 }
+h5 { @extend .ft-2 }
+h6 { @extend .ft-1 }
+p { @extend .ft-0 }
+li { @extend .ft-0 }
+label { @extend .-ft-3 }
+b { @apply font-bold }
+
+h1, h2, h3, h4, h5, h6 {
+  @apply text-gray-700 tracking-normal;
+  margin-block-start: 0;
+}
+h1, h2, h3 {
+  font-family: "Helvetica Neue", sans-serif;
+  @apply font-medium;
+}
+
+h4, h5, h6 {
+  font-family: "Helvetica Neue", sans-serif;
+}
+
+p, li {
+  margin-block-start: 0;
+  @apply tracking-wide;
+  // margin-block-end: 1rem;
+}
+
+a {
+  font-size: inherit;
+  color: inherit;
+  text-decoration: none;
+}
+
+.sans {
+  font-family: "Helvetica Neue", sans-serif;
+}
+.serif {
+  font-family: "Helvetica Neue", sans-serif;
+}
+.condensed {
+  font-family: "Helvetica Neue", sans-serif;
+}
