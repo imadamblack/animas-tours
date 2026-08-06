@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { useT } from '../i18n/ui';
 
 /**
  * Galería en modal.
@@ -8,12 +9,15 @@ import Image from 'next/image';
  * @param {function} onClose
  */
 export default function ModalPhotoGallery({images = [], title = '', onClose}) {
+  const t = useT();
 
   return (
     <div className="fixed inset-0 z-[100] bg-white/90 overflow-y-scroll">
       <div className="fixed inset-0" onClick={onClose}/>
       <div className="container relative items-center justify-center">
         <div
+          role="button"
+          aria-label={t('gallery.close')}
           className="ft-1 flex fixed top-8 z-[100] justify-center items-center h-20 w-20 rounded-full cursor-pointer bg-white border shadow-lg"
           onClick={onClose}
         >✕</div>

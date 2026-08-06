@@ -3,17 +3,34 @@ import { info } from '../../../info';
 import Header from './header';
 import Footer from './footer';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
+import { getHome, DEFAULT_LOCALE, LOCALES } from '../../../DataAtlas';
+import { useLocale } from '../../i18n/ui';
+
+const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || info.siteUrl || '').replace(/\/$/, '');
+
+/** URL absoluta de una ruta en un idioma dado. El español vive en la raíz. */
+const localizedUrl = (path, locale) => {
+  const clean = path.split('?')[0].split('#')[0];
+  const prefix = locale === DEFAULT_LOCALE ? '' : `/${locale}`;
+  return `${SITE_URL}${prefix}${clean === '/' ? '' : clean}` || `${SITE_URL}/`;
+};
 
 export default function Layout({children}) {
-  const router = useRouter()
+  const router = useRouter();
+  const locale = useLocale();
   const [header, setHeader] = useState(true);
+
+  // Título y descripción salen del contenido del idioma activo.
+  const {metaTitle, metaDescription} = getHome(locale);
+  const title = metaTitle || `${info.companyName} | ${info.description}`;
+  const description = metaDescription || info.description;
+
+  const path = router.asPath;
 
   useEffect(() => {
     setHeader(router.pathname !== '/survey');
   }, [router.pathname]);
-
-  console.log('H',header);
 
   useEffect(() => {
     // Espera a que el DOM actualice antes de medir
@@ -38,8 +55,19 @@ export default function Layout({children}) {
   return (
     <>
       <Head>
-        <title>{info.companyName} | {info.description}</title>
-        <meta name="description" content={info.description}/>
+        <title>{title}</title>
+        <meta name="description" content={description}/>
+
+        {/* Le dice a Google que cada página existe en dos idiomas y cuál es cuál. */}
+        {SITE_URL && (
+          <>
+            <link rel="canonical" href={localizedUrl(path, locale)}/>
+            {LOCALES.map((code) => (
+              <link key={code} rel="alternate" hrefLang={code} href={localizedUrl(path, code)}/>
+            ))}
+            <link rel="alternate" hrefLang="x-default" href={localizedUrl(path, DEFAULT_LOCALE)}/>
+          </>
+        )}
       </Head>
       {header && <Header/>}
 

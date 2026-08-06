@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
+import { useLocale, useT } from '../../i18n/ui';
 
 export const Select = ({name, inputOptions, options, placeholder, className = '', value = '', onChange}) => {
   const {register} = useFormContext();
@@ -46,10 +47,11 @@ export const Radio = ({name, inputOptions, options, optCols = 3, className = ''}
 
 /* ============================================================
    DatePicker — calendario accesible (WAI-ARIA date grid)
-   Fecha única · locale es-MX · valor serializado como yyyy-mm-dd
+   Fecha única · bilingüe (es-MX / en-US) · valor yyyy-mm-dd
    ============================================================ */
 
-const LOCALE = 'es-MX';
+/* Locale de Intl que corresponde a cada idioma del sitio. */
+const INTL_LOCALE = {es: 'es-MX', en: 'en-US'};
 
 /* --- Helpers de fecha: SIEMPRE en enteros de fecha local --- */
 /* Nunca usar new Date('2026-06-04') / Date.parse: eso se interpreta
@@ -95,20 +97,42 @@ const clampDate = (date, min, max) => {
 /* Lunes primero: cuántos huecos van antes del día 1 */
 const leadingBlanks = (firstOfMonth) => (firstOfMonth.getDay() + 6) % 7;
 
-const WEEKDAYS_SHORT = ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá', 'Do'];
-
-const fmtMonthTitle = new Intl.DateTimeFormat(LOCALE, {month: 'long', year: 'numeric'});
-const fmtDayLabel = new Intl.DateTimeFormat(LOCALE, {
-  weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
-});
-const fmtValueLong = new Intl.DateTimeFormat(LOCALE, {day: 'numeric', month: 'long', year: 'numeric'});
-const fmtValueMedium = new Intl.DateTimeFormat(LOCALE, {day: 'numeric', month: 'short', year: 'numeric'});
-const fmtValueShort = new Intl.DateTimeFormat(LOCALE, {day: '2-digit', month: '2-digit', year: 'numeric'});
-const fmtValueFull = new Intl.DateTimeFormat(LOCALE, {
-  weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
-});
-
 const capitalize = (str) => (str ? str.charAt(0).toUpperCase() + str.slice(1) : str);
+
+/* Iniciales de los días, lunes primero, generadas desde Intl para que cambien
+   con el idioma: Lu Ma Mi Ju Vi Sá Do / Mo Tu We Th Fr Sa Su */
+const buildWeekdays = (intlLocale) => {
+  const fmt = new Intl.DateTimeFormat(intlLocale, {weekday: 'short'});
+  // 1 de enero de 2024 cayó en lunes: sirve de ancla para recorrer la semana.
+  return Array.from({length: 7}, (_, i) =>
+    capitalize(fmt.format(new Date(2024, 0, 1 + i)).replace('.', '').slice(0, 2)),
+  );
+};
+
+/* Los objetos de Intl son caros de construir: se crean una vez por idioma. */
+const formattersCache = {};
+
+const getDateFormatters = (locale) => {
+  if (formattersCache[locale]) return formattersCache[locale];
+
+  const intlLocale = INTL_LOCALE[locale] || INTL_LOCALE.es;
+
+  formattersCache[locale] = {
+    weekdays: buildWeekdays(intlLocale),
+    monthTitle: new Intl.DateTimeFormat(intlLocale, {month: 'long', year: 'numeric'}),
+    dayLabel: new Intl.DateTimeFormat(intlLocale, {
+      weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
+    }),
+    valueLong: new Intl.DateTimeFormat(intlLocale, {day: 'numeric', month: 'long', year: 'numeric'}),
+    valueMedium: new Intl.DateTimeFormat(intlLocale, {day: 'numeric', month: 'short', year: 'numeric'}),
+    valueShort: new Intl.DateTimeFormat(intlLocale, {day: '2-digit', month: '2-digit', year: 'numeric'}),
+    valueFull: new Intl.DateTimeFormat(intlLocale, {
+      weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
+    }),
+  };
+
+  return formattersCache[locale];
+};
 
 const Icon = ({name, className = ''}) => (
   <span className={`material-symbols-outlined ${className}`} aria-hidden="true">{name}</span>
@@ -122,7 +146,7 @@ const Icon = ({name, className = ''}) => (
  * @param {Date|string} min        Fecha mínima seleccionable (Date o 'yyyy-mm-dd').
  * @param {Date|string} max        Fecha máxima seleccionable.
  * @param {function} disabledDates Predicado (date) => boolean para deshabilitar días.
- * @param {string}   placeholder   Texto cuando no hay valor.
+ * @param {string}   placeholder   Texto cuando no hay valor. Por defecto, el del idioma activo.
  * @param {string}   format        'long' | 'short' | 'full' — cómo se muestra la fecha.
  * @param {string}   value         Valor controlado ('yyyy-mm-dd') si no usas react-hook-form.
  * @param {function} onChange      Callback con el valor ISO ('yyyy-mm-dd' | '').
@@ -134,7 +158,7 @@ export const DatePicker = ({
   min,
   max,
   disabledDates,
-  placeholder = 'Selecciona una fecha',
+  placeholder,
   format = 'long',
   className = '',
   value,
@@ -144,6 +168,12 @@ export const DatePicker = ({
 }) => {
   const form = useFormContext();
   const isRHF = !!form && typeof form.register === 'function';
+
+  /* Idioma activo: define los nombres de meses y días y los textos del calendario. */
+  const locale = useLocale();
+  const t = useT();
+  const fmt = getDateFormatters(locale);
+  const emptyLabel = placeholder || t('date.placeholder');
 
   const reactId = useId();
   const baseId = id || `dp-${String(reactId).replace(/[:]/g, '')}`;
@@ -309,15 +339,15 @@ export const DatePicker = ({
 
   const displayValue = useMemo(() => {
     if (!selected) return '';
-    if (format === 'short') return fmtValueShort.format(selected);
-    if (format === 'medium') return fmtValueMedium.format(selected).replace('.', '');
-    if (format === 'full') return capitalize(fmtValueFull.format(selected));
-    return fmtValueLong.format(selected);
-  }, [selected, format]);
+    if (format === 'short') return fmt.valueShort.format(selected);
+    if (format === 'medium') return fmt.valueMedium.format(selected).replace('.', '');
+    if (format === 'full') return capitalize(fmt.valueFull.format(selected));
+    return fmt.valueLong.format(selected);
+  }, [selected, format, fmt]);
 
   /* Atajo del pie: hoy, o la fecha seleccionable más próxima si hoy está fuera de rango */
   const shortcutDate = useMemo(() => clampDate(today, minDate, maxDate), [today, minDate, maxDate]);
-  const shortcutLabel = sameDay(shortcutDate, today) ? 'Hoy' : 'Más próxima';
+  const shortcutLabel = sameDay(shortcutDate, today) ? t('date.today') : t('date.soonest');
 
   return (
     <div ref={rootRef} className={`datepicker ${className}`}>
@@ -349,13 +379,13 @@ export const DatePicker = ({
       >
         <Icon name="calendar_month" className="dp-icon" />
         <span className={selected ? 'dp-value' : 'dp-placeholder'}>
-          {displayValue || placeholder}
+          {displayValue || emptyLabel}
         </span>
         {clearable && selected && (
           <span
             role="button"
             tabIndex={-1}
-            aria-label="Limpiar fecha"
+            aria-label={t('date.clearAria')}
             className="dp-clear"
             onClick={(e) => {
               e.stopPropagation();
@@ -372,27 +402,27 @@ export const DatePicker = ({
           id={popoverId}
           role="dialog"
           aria-modal="false"
-          aria-label="Elegir fecha"
+          aria-label={t('date.dialogAria')}
           className="dp-pop"
         >
           {/* Encabezado */}
           <div className="dp-head">
             <button type="button" className="dp-nav" onClick={() => goMonth(-1)}
-              disabled={prevDisabled} aria-label="Mes anterior">
+              disabled={prevDisabled} aria-label={t('date.prevMonth')}>
               <Icon name="chevron_left" />
             </button>
             <div id={titleId} aria-live="polite" className="dp-title">
-              {fmtMonthTitle.format(viewMonth)}
+              {capitalize(fmt.monthTitle.format(viewMonth))}
             </div>
             <button type="button" className="dp-nav" onClick={() => goMonth(1)}
-              disabled={nextDisabled} aria-label="Mes siguiente">
+              disabled={nextDisabled} aria-label={t('date.nextMonth')}>
               <Icon name="chevron_right" />
             </button>
           </div>
 
           {/* Días de la semana (lunes primero) */}
           <div className="dp-week">
-            {WEEKDAYS_SHORT.map((day) => (
+            {fmt.weekdays.map((day) => (
               <div key={day} className="dp-wd" aria-hidden="true">{day}</div>
             ))}
           </div>
@@ -424,8 +454,9 @@ export const DatePicker = ({
                   aria-disabled={disabled || undefined}
                   aria-selected={isSelected}
                   aria-label={
-                    `${capitalize(fmtDayLabel.format(date))}` +
-                    `${isToday ? ' (Hoy)' : ''}${disabled ? ' (No disponible)' : ''}`
+                    `${capitalize(fmt.dayLabel.format(date))}` +
+                    `${isToday ? ` (${t('date.today')})` : ''}` +
+                    `${disabled ? ` (${t('date.unavailable')})` : ''}`
                   }
                   onClick={() => selectDate(date)}
                   className={[
@@ -458,7 +489,7 @@ export const DatePicker = ({
                   commit(null);
                   closePopover(true);
                 }}
-              >Limpiar</button>
+              >{t('date.clear')}</button>
             )}
           </div>
         </div>

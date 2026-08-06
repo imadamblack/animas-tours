@@ -1,16 +1,18 @@
 import { info } from '../../info';
+import { useT } from '../i18n/ui';
 
 export default function ThankYou() {
+  const t = useT();
   const whatsappUrl = `https://wa.me/${info.whatsapp.value}?text=${encodeURIComponent(info.whatsapp.message)}`;
 
   return (
     <section className="relative flex flex-col flex-grow justify-center pt-20 px-0">
       <div className="container md:w-1/2 flex flex-col items-center gap-8">
         <h1 className="ft-8 text-center">
-          Listo, recibimos tu solicitud
+          {t('thanks.title')}
         </h1>
         <p className="text-center">
-          {`Un miembro del equipo de ${info.companyName} te contactará por WhatsApp para confirmar disponibilidad y cerrar tu reservación.`}
+          {t('thanks.body', {company: info.companyName})}
         </p>
         <div className="flex flex-col items-center justify-center gap-10">
           <a
@@ -20,7 +22,8 @@ export default function ThankYou() {
             rel="noreferrer"
           >
             <p className="text-green-600">
-              ¿Tienes prisa? Escríbenos por <span className="font-semibold">WhatsApp</span>
+              {t('thanks.whatsappPre')}{' '}
+              <span className="font-semibold">{t('thanks.whatsapp')}</span>
             </p>
           </a>
         </div>

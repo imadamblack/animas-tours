@@ -6,8 +6,8 @@ import scrollDepth from '../utils/scrollDepth';
 import ReviewList from './ReviewList';
 import Mapa from './mapa';
 import ModalPhotoGallery from './photoModal';
-import { tours } from '../../DataAtlas';
 import { formatPriceFrom } from '../utils/formatters';
+import { useLocale, useT } from '../i18n/ui';
 
 // Cuántas imágenes secundarias caben en el mosaico de escritorio.
 const GRID_SLOTS = 4;
@@ -23,14 +23,17 @@ const GRID_LAYOUTS = {
 /**
  * Plantilla de página de detalle de tour.
  * Las páginas se generan desde la ruta dinámica /src/pages/tours/[slug].js,
- * que resuelve el objeto de contenido de cada tour desde DataAtlas.js.
+ * que resuelve el contenido del idioma activo desde DataAtlas.js.
  *
- * @param {object}   tour     contenido del tour (DataAtlas.js)
+ * @param {object}   tour     contenido del tour, ya en el idioma de la página
+ * @param {object[]} tours    todos los tours del mismo idioma, para "Otras aventuras"
  * @param {string[]} gallery  rutas reales de /public/imgSlider/<slug>, leídas en build
- * @param {object}   covers   mapa slug -> portada, para la sección "Otras aventuras"
+ * @param {object}   covers   mapa slug -> portada
  */
-export default function TourPage({tour, gallery = [], covers = {}}) {
+export default function TourPage({tour, tours = [], gallery = [], covers = {}}) {
   const [openPhotoModal, setOpenPhotoModal] = useState(false);
+  const locale = useLocale();
+  const t = useT();
 
   useEffect(() => {
     scrollDepth({
@@ -73,11 +76,11 @@ export default function TourPage({tour, gallery = [], covers = {}}) {
   const ReservaCard = () => (
     <>
       <div className="w-full mb-8 p-8 rounded-2xl shadow-lg bg-white border">
-        <p className="condensed font-bold text-center">🚨 Pregunta por descuentos de temporada y grupos</p>
+        <p className="condensed font-bold text-center">{t('reserve.tourBanner')}</p>
       </div>
       <div className="w-full p-8 rounded-2xl shadow-lg bg-white border">
         <div className="border-b border-gray-200 mb-8">
-          <p className="ft-3 font-medium mb-8">{formatPriceFrom(priceFrom, priceNote)}</p>
+          <p className="ft-3 font-medium mb-8">{formatPriceFrom(priceFrom, priceNote, locale)}</p>
         </div>
         <OptInForm tour={slug} />
       </div>
@@ -102,7 +105,7 @@ export default function TourPage({tour, gallery = [], covers = {}}) {
                 <button
                   onClick={() => setOpenPhotoModal(true)}
                   className="-ft-2 absolute bg-white hover:bg-gray-100 hover:text-brand-2 bottom-8 right-8 text-brand-2 shadow-lg border border-brand-2"
-                >Más imágenes
+                >{t('tour.moreImages')}
                 </button>
               )}
               <div className={`grid gap-4 ${gridImages.length ? 'grid-cols-2' : 'grid-cols-1'}`}>
@@ -161,27 +164,23 @@ export default function TourPage({tour, gallery = [], covers = {}}) {
       <section className="container mt-12 lg:mt-0 flex gap-8">
         <div className="flex-grow w-full lg:w-2/3 mb-20">
           <div className="max-w-[72rem]">
-            {/*<Link href="/" passHref>*/}
-            {/*  <a className="-ft-1 text-brand-1 font-medium">← Todos los tours</a>*/}
-            {/*</Link>*/}
-
             <h2 className="mt-4">{name}</h2>
             <p className="mt-4">{tagline}</p>
             <p className="mt-4">
-              {rate} <span className="text-yellow-400">{stars}</span> | {ratings} reseñas
+              {rate} <span className="text-yellow-400">{stars}</span> | {t('tour.reviews', {count: ratings})}
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 border rounded-3xl mt-12 p-8">
               <div>
-                <p className="-ft-2 uppercase font-medium">Duración</p>
+                <p className="-ft-2 uppercase font-medium">{t('tour.duration')}</p>
                 <p>{duration}</p>
               </div>
               <div>
-                <p className="-ft-2 uppercase font-medium">Check In</p>
+                <p className="-ft-2 uppercase font-medium">{t('tour.checkIn')}</p>
                 <p dangerouslySetInnerHTML={{__html: schedule}}/>
               </div>
               <div>
-                <p className="-ft-2 uppercase font-medium">Embarcación</p>
+                <p className="-ft-2 uppercase font-medium">{t('tour.boat')}</p>
                 <p dangerouslySetInnerHTML={{__html: boat}}/>
               </div>
             </div>
@@ -199,7 +198,7 @@ export default function TourPage({tour, gallery = [], covers = {}}) {
             </div>
 
             <div id="itinerario" className="border-b py-16 w-full">
-              <h2 className="mb-16">Cómo se vive el recorrido</h2>
+              <h2 className="mb-16">{t('tour.itineraryTitle')}</h2>
               <div className="flex flex-col gap-8">
                 {itinerary.map(({time, text}, idx) => (
                   <div key={`it-${idx}`} className="grid grid-cols-5 gap-8 items-start">
@@ -211,7 +210,7 @@ export default function TourPage({tour, gallery = [], covers = {}}) {
             </div>
 
             <div id="incluye" className="border-b py-16 w-full">
-              <h2 className="mb-16">Qué incluye</h2>
+              <h2 className="mb-16">{t('tour.includesTitle')}</h2>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                 {includes.map(({key, value}, idx) => (
                   <div key={`inc-${idx}`} className="w-full grid grid-cols-8 items-center gap-8">
@@ -230,7 +229,7 @@ export default function TourPage({tour, gallery = [], covers = {}}) {
             </div>
 
             <div id="no-incluye" className="border-b py-16 w-full">
-              <h3 className="mb-8">No incluye</h3>
+              <h3 className="mb-8">{t('tour.notIncludesTitle')}</h3>
               <ul className="list-disc pl-8 flex flex-col gap-4">
                 {notIncludes.map((item, idx) => (
                   <li key={`ninc-${idx}`}>{item}</li>
@@ -251,14 +250,14 @@ export default function TourPage({tour, gallery = [], covers = {}}) {
       <section className="w-full py-8 bg-white shadow-lg border-t sticky bottom-0 lg:bottom-auto top-0 z-[50]">
         <div className="container flex justify-center lg:justify-between">
           <div className="hidden lg:flex items-center gap-8">
-            <a href="#fotos" className="ft-0">Fotos</a>
-            <a href="#description" className="ft-0">Descripción</a>
-            <a href="#itinerario" className="ft-0">Itinerario</a>
-            <a href="#incluye" className="ft-0">Incluye</a>
+            <a href="#fotos" className="ft-0">{t('nav.photos')}</a>
+            <a href="#description" className="ft-0">{t('nav.description')}</a>
+            <a href="#itinerario" className="ft-0">{t('nav.itinerary')}</a>
+            <a href="#incluye" className="ft-0">{t('nav.includes')}</a>
           </div>
           <div
             className="flex w-full lg:w-1/6 bg-brand-5 rounded-lg border border-green-800 shadow-xl h-[4.2rem] px-8 items-center">
-            <a href="#form" className="-ft-1 w-full text-white text-center font-medium">Reservar mi lugar</a>
+            <a href="#form" className="-ft-1 w-full text-white text-center font-medium">{t('nav.bookSeat')}</a>
           </div>
         </div>
       </section>
@@ -266,7 +265,7 @@ export default function TourPage({tour, gallery = [], covers = {}}) {
       {locations.length > 0 && (
         <section id="map" className="container border-t py-20">
           <h2 className="mb-16">
-            {locations.length > 1 ? 'Puntos de encuentro' : 'Punto de encuentro'}
+            {locations.length > 1 ? t('map.title.many') : t('map.title.one')}
           </h2>
           <div className={`grid grid-cols-1 gap-16 ${locations.length > 1 ? 'lg:grid-cols-2' : ''}`}>
             {locations.map((location, idx) => (
@@ -286,7 +285,7 @@ export default function TourPage({tour, gallery = [], covers = {}}) {
 
       <section className="container border-t py-20">
         <div className="md:w-1/3 mx-auto">
-          <p className="ft-11 font-bold text-center mb-8">Reseñas de viajeros que confirman lo que tú estás por vivir</p>
+          <p className="ft-11 font-bold text-center mb-8">{t('tour.reviewsTitle')}</p>
         </div>
         <ReviewList/>
       </section>
@@ -300,22 +299,24 @@ export default function TourPage({tour, gallery = [], covers = {}}) {
       </section>
 
       <section id="tours" className="justify-center border-t py-16">
-        <h2 className="container mb-16">Otras aventuras</h2>
+        <h2 className="container mb-16">{t('tour.otherTours')}</h2>
         <div className="overflow-x-scroll">
         <div className="container flex w-max gap-8">
-          {tours.filter((t) => t.slug !== slug).map((tour) => (
-            <Link key={tour.slug} href={`/tours/${tour.slug}`} passHref>
+          {tours.filter((other) => other.slug !== slug).map((other) => (
+            <Link key={other.slug} href={`/tours/${other.slug}`} passHref>
               <a className="flex w-[24rem] flex-col overflow-hidden">
                 <div className="relative w-full aspect-square pt-[66%] bg-gray-100 rounded-2xl overflow-hidden">
-                  {covers[tour.slug] && (
-                    <Image src={covers[tour.slug]} layout="fill" loading="lazy" alt={tour.name}
+                  {covers[other.slug] && (
+                    <Image src={covers[other.slug]} layout="fill" loading="lazy" alt={other.name}
                            className="object-cover object-center"/>
                   )}
                 </div>
                 <div className="flex flex-col flex-grow py-4">
-                  <p className="font-medium">{tour.name}</p>
-                  <p className="-ft-2 mt-2">{formatPriceFrom(tour.priceFrom, tour.priceNote)} {' | '}★ {tour.rate}</p>
-                  <p className="-ft-1 mt-4 text-brand-1 font-medium">Ver el tour →</p>
+                  <p className="font-medium">{other.name}</p>
+                  <p className="-ft-2 mt-2">
+                    {formatPriceFrom(other.priceFrom, other.priceNote, locale)} {' | '}★ {other.rate}
+                  </p>
+                  <p className="-ft-1 mt-4 text-brand-1 font-medium">{t('home.viewTour')}</p>
                 </div>
               </a>
             </Link>

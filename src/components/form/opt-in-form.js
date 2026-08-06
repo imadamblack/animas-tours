@@ -6,11 +6,14 @@ import { useState } from 'react';
 import { restrictNumber } from '../../utils/formValidators';
 import fbEvent from '../../services/fbEvents';
 import { DatePicker, Select, toISODate } from './formAtoms';
-import { tours } from '../../../DataAtlas';
+import { getTours } from '../../../DataAtlas';
+import { useLocale, useT } from '../../i18n/ui';
 
 export default function OptInForm({tour = '', price = '', lastClick = '', onTourChange}) {
   const [sending, setSending] = useState(false);
   const router = useRouter();
+  const locale = useLocale();
+  const t = useT();
 
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -45,6 +48,8 @@ export default function OptInForm({tour = '', price = '', lastClick = '', onTour
     data.cleanPhone = '52' + data.phone.replace(/^(MX)?\+?(52)?\s?0?1?|\s|\(|\)|-|[a-zA-Z]/g, '');
     data.origin = 'Notoriovs Landing';
     data.tour = tour;
+    // El idioma del lead le dice al equipo de ventas en qué idioma responder.
+    data.locale = locale;
 
     const _fbc = getCookie('_fbc');
     const _fbp = getCookie('_fbp');
@@ -74,7 +79,7 @@ export default function OptInForm({tour = '', price = '', lastClick = '', onTour
       <form className="flex flex-col w-full space-y-4" onSubmit={handleSubmit(onSubmit)}>
         <div className="grid grid-cols-2 gap-4">
           <div className="w-full">
-            <p className="-ft-1 uppercase font-medium">Fecha</p>
+            <p className="-ft-1 uppercase font-medium">{t('form.date')}</p>
             <DatePicker
               name="tourDate"
               inputOptions={{required: true}}
@@ -82,44 +87,44 @@ export default function OptInForm({tour = '', price = '', lastClick = '', onTour
               max={maxDateForInput}
               format="medium"
               clearable={false}
-              placeholder="Fecha del tour"/>
+              placeholder={t('form.datePlaceholder')}/>
           </div>
           <div className="w-full">
-            <p className="-ft-1 uppercase font-medium">Personas</p>
+            <p className="-ft-1 uppercase font-medium">{t('form.pax')}</p>
             <input
               {...register('pax', {required: true})}
               type="number"
               min="1"
               className={errors.pax && '!bg-red-200'}
               onKeyDown={restrictNumber}
-              placeholder="Personas"/>
+              placeholder={t('form.paxPlaceholder')}/>
           </div>
         </div>
 
         <input
           {...register('fullName', {required: true})}
           className={errors.fullName && '!bg-red-200'}
-          placeholder="Tu nombre"/>
+          placeholder={t('form.name')}/>
 
         <input
           {...register('phone', {required: true, maxLength: 10, minLength: 10})}
           className={errors.phone && '!bg-red-200'}
           onKeyDown={restrictNumber}
-          placeholder="Teléfono de WhatsApp"/>
+          placeholder={t('form.phone')}/>
 
         {/*<input*/}
         {/*  {...register('email', {required: true})}*/}
         {/*  type="email"*/}
         {/*  className={errors.email && '!bg-red-200'}*/}
-        {/*  placeholder="Correo electrónico"/>*/}
+        {/*  placeholder={t('form.email')}/>*/}
 
         {/*<Select*/}
         {/*  name="tour"*/}
         {/*  inputOptions={{required: true}}*/}
-        {/*  placeholder="¿Qué tour te interesa?"*/}
+        {/*  placeholder={t('form.tourQuestion')}*/}
         {/*  value={tour}*/}
         {/*  onChange={(newTour) => onTourChange && onTourChange(newTour)}*/}
-        {/*  options={tours.map(({slug, name}) => ({value: slug, name}))}*/}
+        {/*  options={getTours(locale).map(({slug, name}) => ({value: slug, name}))}*/}
         {/*/>*/}
 
         <button
@@ -127,12 +132,12 @@ export default function OptInForm({tour = '', price = '', lastClick = '', onTour
           className={`w-full ${sending ? '!bg-transparent' : 'hover:!bg-brand-3'}`}
         >{
           !sending
-            ? 'Reservar →'
+            ? t('form.submit')
             : <span className="material-symbols-outlined text-brand-5 animate-spin">progress_activity</span>
         }</button>
 
         <div className="mt-4">
-          <p className="-ft-2 text-center">Aún no se te cobrará nada</p>
+          <p className="-ft-2 text-center">{t('form.noCharge')}</p>
         </div>
       </form>
     </FormProvider>

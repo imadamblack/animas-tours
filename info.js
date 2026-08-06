@@ -4,6 +4,9 @@
  * información real de Zarpa Tours Vallarta antes de publicar.
  */
 export const info = {
+  /* Dominio final del sitio. Se usa para las etiquetas hreflang y la canónica.
+     Se puede sobreescribir con NEXT_PUBLIC_SITE_URL en el entorno. */
+  siteUrl: "https://vallartawknd.com", // TODO: confirmar dominio de producción
   legalName: "Las Ánimas Tours S.A. de C.V.",
   companyName: "Las Ánimas Vallarta Tours",
   description: "Tours y experiencias en el mar de Puerto Vallarta",
