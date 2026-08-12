@@ -18,17 +18,16 @@ import { usd } from '../utils/formatters';
  * ------------------------------------------------------------------------ */
 export const home = {
   slug: 'home',
-  name: 'Zarpa Tours Vallarta',
-  headline: 'TODO: Puerto Vallarta looks different from the water',
-  subheadline:
-    'TODO: one-line main promise (e.g. boat and catamaran tours to the best beaches in Banderas Bay, small groups, daily departures).',
-  metaTitle: 'Vallarta WKND | Boat tours and ocean experiences in Puerto Vallarta',
+  name: 'Animas Vallarta Tours',
+  headline: 'Puerto Vallarta looks different from the water',
+  subheadline: '',
+  metaTitle: 'Animas Vallarta Tours | Boat tours and ocean experiences in Puerto Vallarta',
   metaDescription:
     'Catamaran and private yacht tours to Las Ánimas, Madagascar and Majahuitas, plus whale watching in Banderas Bay. Daily departures from Puerto Mágico.',
   rate: 4.3,
   stars: '★★★★★',
   ratings: 25,
-  reviewsSource: 'TODO: Google / Tripadvisor',
+  reviewsSource: 'Google / Tripadvisor',
   description: `<h2>Nobody knows the South Shore better</h2><br/>
   We work with the best operators in Las Ánimas, Majahuitas, Madagascar and Quimixto, and we pick the one that actually fits your group, your budget and your pace.<br/>
   We handle schedules, transfers, availability and all the small details you only learn by living here, so the only thing you have to worry about is getting to the dock.`,

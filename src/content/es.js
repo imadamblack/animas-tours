@@ -13,17 +13,16 @@
  * ------------------------------------------------------------------------ */
 export const home = {
   slug: 'home',
-  name: 'Zarpa Tours Vallarta',
-  headline: 'TODO: Puerto Vallarta se ve distinto desde el agua',
-  subheadline:
-    'TODO: promesa principal en una línea (ej. tours en lancha y catamarán a las mejores playas de Bahía de Banderas, con grupos chicos y salida diaria).',
-  metaTitle: 'Vallarta WKND | Tours y experiencias en el mar de Puerto Vallarta',
+  name: 'Animas Vallarta Tours',
+  headline: 'Puerto Vallarta se ve distinto desde el agua',
+  subheadline: '',
+  metaTitle: 'Animas Vallarta Tours | Tours y experiencias en el mar de Puerto Vallarta',
   metaDescription:
     'Tours en catamarán y yate privado a Las Ánimas, Madagascar y Majahuitas, y avistamiento de ballenas en la Bahía de Banderas. Salidas diarias desde Puerto Mágico.',
   rate: 4.3,
   stars: '★★★★★',
   ratings: 25,
-  reviewsSource: 'TODO: Google / Tripadvisor',
+  reviewsSource: 'Google / Tripadvisor',
   description: `<h2>Conocemos la Costa Sur mejor que nadie</h2><br/>
   Trabajamos con los mejores operadores de Las Ánimas, Majahuitas, Madagascar y Quimixto, y elegimos el que realmente embona con tu grupo, tu presupuesto y tu ritmo.<br/>
   Nos encargamos de horarios, traslados, cupos y detalles que solo se aprenden estando aquí, para que tú solo te preocupes por llegar al muelle`,
