@@ -1,6 +1,13 @@
+import Head from 'next/head';
 import TourPage from '../../components/TourPage';
 import { getTour, getTours, getTourSlugs } from '../../../DataAtlas';
 import { getGalleryImages, getTourVideo } from '../../utils/galleryImages';
+import { info } from '../../../info';
+
+// Las etiquetas Open Graph exigen URLs absolutas: las rutas de /public no bastan.
+const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || info.siteUrl || '').replace(/\/$/, '');
+
+const absoluteUrl = (path) => (path && SITE_URL ? `${SITE_URL}${path}` : null);
 
 export function getStaticPaths({locales}) {
   const slugs = getTourSlugs();
@@ -39,7 +46,23 @@ export function getStaticProps({params, locale}) {
 }
 
 export default function Tour({tour, tours, gallery, covers, video}) {
+  /* next/head se queda con la última etiqueta repetida, así que este bloque
+     sobrescribe el título y la descripción genéricos que pone Layout. */
+  const title = `Animas Tours: ${tour.name}`;
+  const description = tour.tagline;
+  const [cover] = gallery;
+  const image = absoluteUrl(cover);
+
   return (
-    <TourPage tour={tour} tours={tours} gallery={gallery} covers={covers} video={video}/>
+    <>
+      <Head>
+        <title>{title}</title>
+        {description && <meta name="description" content={description}/>}
+        <meta property="og:title" content={title}/>
+        {description && <meta property="og:description" content={description}/>}
+        {image && <meta property="og:image" content={image}/>}
+      </Head>
+      <TourPage tour={tour} tours={tours} gallery={gallery} covers={covers} video={video}/>
+    </>
   );
 }
