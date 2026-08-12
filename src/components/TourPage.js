@@ -345,7 +345,7 @@ export default function TourPage({tour, tours = [], gallery = [], covers = {}, v
             </div>
 
             <div id="reserva" className="flex lg:hidden justify-center border-t mt-16 pt-16">
-              <div className="flex w-full lg:w-1/3 justify-center mx-auto">
+              <div className="w-full lg:w-1/3 justify-center mx-auto">
                 <ReservaCard/>
               </div>
             </div>
