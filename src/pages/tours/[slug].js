@@ -1,6 +1,6 @@
 import TourPage from '../../components/TourPage';
 import { getTour, getTours, getTourSlugs } from '../../../DataAtlas';
-import { getGalleryImages } from '../../utils/galleryImages';
+import { getGalleryImages, getTourVideo } from '../../utils/galleryImages';
 
 export function getStaticPaths({locales}) {
   const slugs = getTourSlugs();
@@ -23,6 +23,9 @@ export function getStaticProps({params, locale}) {
   // Las imágenes se leen del disco en build: nunca se pide un archivo inexistente.
   const gallery = getGalleryImages(params.slug);
 
+  // Video opcional: solo los tours que tengan video.mp4 renderizan la sección.
+  const video = getTourVideo(params.slug);
+
   // Portada y nombre de cada uno de los otros tours para "Otras aventuras".
   const tours = getTours(locale);
 
@@ -32,9 +35,11 @@ export function getStaticProps({params, locale}) {
     return acc;
   }, {});
 
-  return {props: {tour, tours, gallery, covers}};
+  return {props: {tour, tours, gallery, covers, video: video || null}};
 }
 
-export default function Tour({tour, tours, gallery, covers}) {
-  return <TourPage tour={tour} tours={tours} gallery={gallery} covers={covers}/>;
+export default function Tour({tour, tours, gallery, covers, video}) {
+  return (
+    <TourPage tour={tour} tours={tours} gallery={gallery} covers={covers} video={video}/>
+  );
 }

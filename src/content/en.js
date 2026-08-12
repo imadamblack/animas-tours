@@ -97,7 +97,8 @@ export const tours = [
     stars: '★★★★★',
     ratings: 25,
     description: `A tour built for families, couples and groups of friends who want the full experience without waking up at dawn.<br/><br/>
-In just 6 hours you sail out to two of the most stunning spots on Puerto Vallarta's south shore.<br/><br/>
+In just 6 hours you sail along the best of Puerto Vallarta's south shore.<br/><br/>
+Photo stop at the Mismaloya Arches.<br/><br/>
 Snorkeling, paddle boarding, kayaking and water inflatables at Madagascar Beach.<br/><br/>
 2 hours at the Las Ánimas beach club, with lunch included and free time.<br/><br/>
 Music, entertainment and games on board.<br/><br/>
@@ -124,20 +125,27 @@ Arrive 30 minutes before departure to check in, since that is when you choose yo
       'Transportation to the dock',
     ],
     itinerary: [
-      {time: '11:30 am', text: 'Check-in at Puerto Mágico'},
-      {time: '12:00 pm', text: 'We set sail from Puerto Mágico'},
-      {time: '12:00 pm', text: 'Check-in at Los Muertos Pier'},
-      {time: '12:40 pm', text: 'We set sail from Los Muertos Pier with a welcome snack and the WKND Drink'},
+      {time: 'Maritime Terminal', text: 'Passenger check-in and boarding'},
       {
-        time: '01:15 pm',
-        text: 'First stop: Madagascar Beach, 40 minutes of snorkeling, paddle boarding, kayaking and water inflatables',
+        time: 'Los Muertos Pier',
+        text: 'Second boarding point, next to the beach\'s iconic pier and sail',
       },
       {
-        time: '02:30 pm',
-        text: 'Second stop: Las Ánimas Beach, 2 hours at the beach club with loungers, lunch included and free time',
+        time: 'Mismaloya Arches',
+        text: 'Photo stop in front of this iconic natural landmark',
       },
-      {time: '04:30 pm', text: 'We head back with music, entertainment and games on board'},
-      {time: '06:00 pm', text: 'Arrival at the dock'},
+      {
+        time: 'Madagascar Beach',
+        text: 'Water activities: snorkeling, paddle boarding, kayaking and water inflatables',
+      },
+      {
+        time: 'Las Ánimas',
+        text: 'Free time on the beach and lunch at the restaurant',
+      },
+      {
+        time: 'Back to Puerto Mágico',
+        text: 'Party on board with music, dancing, games and entertainment',
+      },
     ],
     map: [
       {

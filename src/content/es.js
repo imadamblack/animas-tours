@@ -92,7 +92,8 @@ export const tours = [
     stars: '★★★★★',
     ratings: 25,
     description: `Un tour diseñado para familias, parejas y grupos de amigos que buscan una experiencia completa sin madrugar.<br/><br/>
-En solo 6 horas navegas hacia dos de los puntos más increíbles de la costa sur de Puerto Vallarta.<br/><br/>
+En solo 6 horas navegas por lo mejor de la costa sur de Puerto Vallarta.<br/><br/>
+Parada fotográfica en los Arcos de Mismaloya.<br/><br/>
 Snorkel, paddle board, kayak o inflables acuáticos en Playa Madagascar<br/><br/>
 2 horas en el club de playa Las Ánimas, alimentos incluidos y tiempo libre.<br/><br/>
 Música, animación y concursos.<br/><br/>
@@ -119,20 +120,27 @@ Llega 30 minutos antes de la hora de salida para tu registro, ya que en el check
       'Transporte al muelle',
     ],
     itinerary: [
-      {time: '11:30 am', text: 'Check-in en Puerto Mágico'},
-      {time: '12:00 pm', text: 'Zarpamos de Puerto Mágico'},
-      {time: '12:00 pm', text: 'Check-in en Muelle Los Muertos'},
-      {time: '12:40 pm', text: 'Zarpamos de Muelle Los Muertos con snack de bienvenida y WKND Drink'},
+      {time: 'Terminal Marítima', text: 'Check-in de pasajeros y abordaje'},
       {
-        time: '01:15 pm',
-        text: 'Primera parada: Playa Madagascar, 40 minutos de snorkel, paddle board, kayak e inflables acuáticos',
+        time: 'Muelle Los Muertos',
+        text: 'Segundo punto de abordaje, junto al muelle icónico de la playa y su vela',
       },
       {
-        time: '02:30 pm',
-        text: 'Segunda parada: Playa Las Ánimas, 2 horas de club de playa con camastros, comida incluida y tiempo libre',
+        time: 'Arcos de Mismaloya',
+        text: 'Parada para fotos frente a este atractivo natural',
       },
-      {time: '04:30 pm', text: 'Zarpamos de regreso con música, animación y concursos a bordo'},
-      {time: '06:00 pm', text: 'Llegada a puerto'},
+      {
+        time: 'Playa Madagascar',
+        text: 'Actividades acuáticas: snorkel, paddle board, kayak e inflables acuáticos',
+      },
+      {
+        time: 'Las Ánimas',
+        text: 'Tiempo libre en la playa y comida en el restaurante',
+      },
+      {
+        time: 'Regreso a Puerto Mágico',
+        text: 'Fiesta a bordo con música, baile, concursos y animación',
+      },
     ],
     // Uno o varios puntos de abordaje. El orden aquí es el orden en pantalla.
     map: [

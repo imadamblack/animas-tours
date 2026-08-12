@@ -38,3 +38,9 @@ yarn-error.log*
 /secrets.json
 
 #respaldo
+
+# originales de video sin comprimir (no se despliegan)
+/_raw
+
+# PROMPTS
+/PROMPT-VIDEO-TOUR.md
