@@ -5,7 +5,7 @@ import { getGalleryImages, getTourVideo } from '../../utils/galleryImages';
 import { info } from '../../../info';
 
 // Las etiquetas Open Graph exigen URLs absolutas: las rutas de /public no bastan.
-const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || info.siteUrl || '').replace(/\/$/, '');
+const SITE_URL = (info.siteUrl || '').replace(/\/$/, '');
 
 const absoluteUrl = (path) => (path && SITE_URL ? `${SITE_URL}${path}` : null);
 

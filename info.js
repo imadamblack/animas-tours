@@ -1,19 +1,12 @@
-/**
- * Datos globales del negocio.
- * Los valores marcados con TODO son adelita-yate-privado: sustituir con la
- * información real de Zarpa Tours Vallarta antes de publicar.
- */
 export const info = {
-  /* Dominio final del sitio. Se usa para las etiquetas hreflang y la canónica.
-     Se puede sobreescribir con NEXT_PUBLIC_SITE_URL en el entorno. */
-  siteUrl: "https://vallartawknd.com", // TODO: confirmar dominio de producción
+  siteUrl: "https://animasvallartatours.com",
   legalName: "Las Ánimas Tours S.A. de C.V.",
-  companyName: "Las Ánimas Vallarta Tours",
+  companyName: "Ánimas Vallarta Tours",
   description: "Tours y experiencias en el mar de Puerto Vallarta",
   email: {
-    sender: "reservaciones@lasanimastours.com",
-    recipients: ["reservaciones@lasanimastours.com"],
-    subject: "Nueva reservación | Las Ánimas Vallarta Tours",
+    sender: "reservaciones@animasvallartatours.com",
+    recipients: ["reservaciones@animasvallartatours.com"],
+    subject: "Nueva reservación | Ánimas Vallarta Tours",
   },
   phoneNumber: "+52322XXXXXXX",
   whatsapp: {
@@ -21,8 +14,8 @@ export const info = {
     message: "Hola! Me interesa reservar un tour con Las Ánimas Vallarta Tours",
   },
   social: {
-    facebook: "https://facebook.com/lasanimastours",
-    instagram: "https://instagram.com/lasanimastours",
+    facebook: "https://facebook.com/animasvallartatours",
+    instagram: "https://instagram.com/animasvallartatours",
     tripadvisor: "",
   },
   address: {
@@ -37,8 +30,7 @@ export const info = {
     name: "nombre de la marina o muelle",
     reference: "referencia de llegada (ej. frente a la Terminal Marítima)",
   },
-  // Webhook heredado del proyecto anterior: confirmar o reemplazar por el de Zarpa
-  optInWebhook: "https://n8n.notoriovs.com/webhook/",
+  optInWebhook: "https://n8n.notoriovs.com/webhook/5268498d-bdac-457d-a796-0e3f095a619d",
   surveyWebhook: "",
   surveyRedirect: "",
   privacyNotice: "/aviso-privacidad",
