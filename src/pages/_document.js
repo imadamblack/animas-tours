@@ -1,4 +1,5 @@
 import { Html, Head, Main, NextScript } from 'next/document';
+import { SCROLL_GUARD } from '../lib/scroll-guard';
 import TrackingAnalytics from '../components/trackingAnalytics';
 
 export default function Document() {
@@ -18,6 +19,7 @@ export default function Document() {
               href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"/>
       </Head>
       <body>
+        <script dangerouslySetInnerHTML={{ __html: SCROLL_GUARD }} />
         <Main/>
         <NextScript/>
       </body>
