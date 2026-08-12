@@ -238,9 +238,9 @@ export default function TourPage({tour, tours = [], gallery = [], covers = {}, v
         <p className="condensed font-bold text-center">{t('reserve.tourBanner')}</p>
       </div>
       <div className="w-full p-8 rounded-2xl shadow-lg bg-white border">
-        <div className="border-b border-gray-200 mb-8">
-          <p className="ft-3 font-medium mb-8">{formatPriceFrom(priceFrom, priceNote, locale)}</p>
-        </div>
+        {/*<div className="border-b border-gray-200 mb-8">*/}
+        {/*  <p className="ft-3 font-medium mb-8">{formatPriceFrom(priceFrom, priceNote, locale)}</p>*/}
+        {/*</div>*/}
         <OptInForm tour={slug} />
       </div>
     </>

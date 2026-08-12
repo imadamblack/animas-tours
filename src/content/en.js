@@ -86,7 +86,7 @@ export const home = {
 export const tours = [
   {
     slug: 'madagascar-animas',
-    name: 'Las Ánimas & Madagascar',
+    name: 'Madagascar & Las Animas',
     tagline: 'More adventure. More fun. In less time.',
     duration: '5½ to 6 hours',
     schedule: 'Puerto Mágico<br/>Los Muertos Pier',
