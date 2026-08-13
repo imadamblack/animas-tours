@@ -8,10 +8,10 @@ export const info = {
     recipients: ["reservaciones@animasvallartatours.com"],
     subject: "Nueva reservación | Ánimas Vallarta Tours",
   },
-  phoneNumber: "+52322XXXXXXX",
+  phoneNumber: "+5213345136774",
   whatsapp: {
-    value: "+52322XXXXXXX",
-    message: "Hola! Me interesa reservar un tour con Las Ánimas Vallarta Tours",
+    value: "+5213345136774",
+    message: "Hola! Me interesa reservar un tour con Ánimas Vallarta Tours",
   },
   social: {
     facebook: "https://facebook.com/animasvallartatours",
