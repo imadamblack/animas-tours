@@ -23,7 +23,7 @@ export default function ModalPhotoGallery({images = [], title = '', onClose}) {
         >✕</div>
         <div className="relative my-40 gap-8 grid grid-cols-1 md:grid-cols-2">
           {images.map((src, idx) => (
-            <div key={src} className="relative w-full pt-[56%] flex snap-center">
+            <div key={src} className="relative w-full aspect-square flex snap-center">
               <Image
                 src={src}
                 layout="fill"
